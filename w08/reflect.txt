@@ -1,0 +1,113 @@
+1. The advantage that smart pointer syntax provides. Use example from your code to support your explanation.
+A smarter pointer should be preferred over raw pointers as it will automatically handle the deallocation of the 
+object at the end of its lifetime, avoiding memory leaks. In the function writeSmart, I didn't use any delete 
+because the smart pointer takes care of deallocation.
+
+	GeneratingList<EmployeeWage> writeRaw(const GeneratingList<Employee>& emp, const GeneratingList<Salary>& sal) {
+		GeneratingList<EmployeeWage> activeEmp;
+		// TODO: Add your code here to build a list of employees using raw pointers
+		for (size_t i = 0; i < emp.size(); i++) {
+			for (size_t j = 0; j < sal.size(); j++) {
+				if (emp[i].id == sal[j].id) {
+					EmployeeWage* temp = new EmployeeWage(emp[i].name, sal[j].salary);   //DMA with custom costructor
+					//validate salary
+					try {
+						temp->rangeValidator();
+					}
+					catch (...) {
+						delete temp;
+						throw std::string("*** Employees salaray range is not valid");
+					}
+					//validate SIN
+					if (!activeEmp.checkLuhn(sal[j].id)) {
+						delete temp;
+						throw std::string("*** SIN is not valid");
+					}
+
+					//now, both validation passed
+					activeEmp += move(*temp);
+					delete temp;
+				}
+			}
+		}
+		
+		return activeEmp;
+	}
+
+	GeneratingList<EmployeeWage> writeSmart(const GeneratingList<Employee>& emp, const GeneratingList<Salary>& sal) {
+		GeneratingList<EmployeeWage> activeEmp;
+		// TODO: Add your code here to build a list of employees using smart pointers
+		for (size_t i = 0; i < emp.size(); i++) {
+			for (size_t j = 0; j < sal.size(); j++) {
+				if (emp[i].id == sal[j].id) {
+					std::shared_ptr<EmployeeWage> temp(new EmployeeWage(emp[i].name, sal[j].salary));   //DMA with custom costructor
+					//validate salary
+					try {
+						temp->rangeValidator();
+					}
+					catch (...) {
+						throw std::string("*** Employees salaray range is not valid");
+					}
+					//validate SIN
+					if (!activeEmp.checkLuhn(sal[j].id)) {
+						throw std::string("*** SIN is not valid");
+					}
+
+					//now, both validation passed
+					activeEmp += move(temp);
+				}
+			}
+		}
+		return activeEmp;
+	}
+
+2. The difference between raw and smart pointer syntax in your solution.
+When creating the new EmployeeWage object with the custom constructor, dynamically allocate the memory for it, we 
+can either use a raw pointer or a smart pointer. To use the smart pointer, we first introduce the library <memory>. 
+The smart pointer syntax is as follows.
+std::shared_ptr<EmployeeWage> temp(new EmployeeWage(emp[i].name, sal[j].salary));
+The raw pointer syntax is shown below.
+EmployeeWage* temp = new EmployeeWage(emp[i].name, sal[j].salary); 
+
+Then the smart pointer will automatically delete the managed object at the appropriate time. While the object pointed 
+by the raw pointer need to be deallocated manually using delete temp.
+
+The syntax of overloading the operator += is also different. Because of the automatic deallocation feature of the 
+smart pointer, we don't need to move the object before appending it to the list. 
+The smart pointer syntax: 
+		void operator+=(const std::shared_ptr<T> &obj) {
+			list.push_back(*obj);
+		}
+The raw pointer syntax:
+		void operator+=(const T&& obj) {
+			list.push_back(std::move(obj));
+		}
+		
+3. Luhn's Algorithm.
+Step 1: Starting from the rightmost digit, double the value of every second digit.
+Step 2: If doubling of a number results in a two digit number, then add the digits to get a single digit number 
+(e.g. 12: 1 + 2 = 3, 15: 1 + 5 = 6). 
+Step 3: Sum up all digits.
+Step 4: If the total modulo 10 is equal to 0 (if the total ends in zero) then the number is valid according to the 
+Luhn formula; else it is not valid.
+
+		bool checkLuhn(const std::string& SIN) {
+			int nDigits = SIN.length();
+
+			int nSum = 0, isSecond = false;
+			for (int i = nDigits - 1; i >= 0; i--) {  //Starting from the rightmost digit
+
+				int d = SIN[i] - '0';
+
+				if (isSecond == true)
+					d = d * 2;    //double the value of every second digit 
+
+				//If doubling of a number results in a two digit number, then add the digits to get a single digit number (e.g. 12: 1 + 2 = 3, 15: 1 + 5 = 6). 
+				nSum += d / 10;   //add to sum the ten digit if there's one
+				nSum += d % 10;   //add to sum the ones digit
+
+				isSecond = !isSecond;   //only double every other digit
+			}
+			//If the total modulo 10 is equal to 0 (if the total ends in zero) then the number is valid
+			return (nSum % 10 == 0);
+		}
