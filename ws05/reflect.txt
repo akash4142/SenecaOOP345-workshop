@@ -1,0 +1,47 @@
+/* Name - akash yadav
+student id = 172566218
+email - ayadav35
+date - 25 - 06-2023
+
+I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
+
+
+1. The difference between the implementations/utilizations of a functor and a lambda expression. When is appropriate to use each one?
+
+A functor is like a special function that remembers some information or variables when it is used. It allows us to access and use those variables even after the function has finished executing. On the other hand, a lambda expression is used when we only need a function temporarily, and it can extract values or references to data outside of its scope. If we already know the types of the parameters for a function, but we need additional data inside the function and we will only use it once, we can use a lambda expression.
+
+2. The constructor for SpellChecker generates an exception in certain conditions. How would you change your code to achieve the same 
+result, but without exceptions (both on the constructor and on the client side)? Compare the two solutions.
+
+The solution used in this workshop is to throw a const char* message to complier to catch. In the main function, use the try... catch to 
+handle the exception that may occur in constructor and the irritation.
+	if (!file) {
+         throw "Bad file name!";
+      }
+Solution 2.
+The other solution to handle the file opening error is simply printing out an error message to the error consoler.
+	if (!file) {
+         std::cerr<< "Bad file name!";
+      }
+	else{
+	   ...//read the content from the file and save into the state variables
+	}
+And in the main function, rather than try... catch, before calling the fixSpelling function, check if the SpellChecker function object sp 
+is empty. If so, don't start irritation.
+
+first solution lets the compiler help us check errors and avoid crushing, and in solution 2 we need to manually check if some conditions are 
+true before some operations and the logic must have no loopholes to avoid bugs. Compared with solution 2, solution 1 is more effortless.
+
+3. The classes Movie and Book contain almost identical logic in loading data from the file. How would you redesign the classes in order 
+not to duplicate that logic?
+
+We can create a basic class that contains the shared code for Movie and Book, and then have Movie and Book inherit from that base class. By doing this, we only need to write the common part of the code once, and we can specify the unique parts of the code in the specific Movie and Book classes.
+
+4. The classes Movie and Book are instantiated from the main() function using a custom constructor, but they also contain a default 
+constructor. Is the default constructor necessary? Could you remove it? Justify your answer.
+
+The default constructor is not necessary in this design but it is good to keep it. Because if someday we want to update the main() function 
+and create a empty Collection of Books or Movies, or if we need to use copy constructor, the program won't crash if we keep the default 
+constuctor.
