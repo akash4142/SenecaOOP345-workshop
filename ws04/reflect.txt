@@ -1,0 +1,28 @@
+/*name - Akash yadav
+student no. = 172566218
+seneca email- ayadav35@myseneca.ca
+date - 10/ june
+
+citation-:
+
+ I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
+*/
+
+
+Hello professor , in this workshop i have learnt about the relationship between two classes which can be composition , aggregation and association . The difference between three of them is that composition is the strong relationship between the classes in which one class has the ownership of the other class. It cares about the lifetime of the class.
+aggregation - this is the another type of relationship between the classes that is the not so strong it has the ownership but it does not care about the lifetime of the class.
+association - this is the weak relationship between the classes after the inheritance . it does not have the ownership and not the lifetime of the class.
+
+ In my code i have used -   
+
+Aggregation relationship - it is used in the Restaurant class where i have a member variable named the "rt_reservations" of type 'Reservation' which is pointer to an array . 
+What it makes aggregation relationship - Restaurant class does not have ownership of 'Reservation' objects . it only holds a pointer to them.
+
+Association relationship : there is an association between the ConfirmationSender class and the Reservation class . because it is adding and removing them from the array.
+
+Both the copy and the move functions can be implemented differently depending on the type of the composition or aggregation: 
+
+composition: in composition relationship both the move and copy will also move or copy the contained object . so both the object are in strong relationship therefore the container object will move or copy contained object.
+
+aggregation: in this they it is not necessary to imply move or copy object the contained object because container holds the reference to contained object.
