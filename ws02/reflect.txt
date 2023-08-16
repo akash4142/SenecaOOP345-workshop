@@ -1,0 +1,13 @@
+NAME - AKASH YADAV
+EMAIL - ayadav35@myseneca.ca
+STUDENT ID  - 172566218
+DATE- 25/MAY/2023
+
+
+1. According to my understanding of the concept what i think about it is that whenever we use the copy operator , the data is duplicated from the original object to the destination object . this allocate memory and then copy each element which for sure takes times for the larger data.
+where if i talk about the move operator it bascially transfers the memory to the destination . this is faster than the copy operator because here we are not doing each data individually.
+
+2. In the TennisLog constructor i am reading the file using the getline keyword which allows me to get the full line one byone .
+another thing what i think we can use is the cin statement or the bool variable to check whether the line havebeen read or not .
+
+3. so in the steady_clock it represents the passage of time . it is mostly used for the durations and the intervals while the steady_clock is clock that represents the current time . this is used to get the current time.
