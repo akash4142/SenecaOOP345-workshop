@@ -1,0 +1,51 @@
+1. Why do you need to deallocate the dynamically allocated memory in your vector?
+
+Deallocating dynamically allocated memory in a vector is necessary to prevent memory leaks. When using the vector to store objects created by the "createInstance" function, dynamic memory allocation is performed for each new object based on certain criteria. At the end of an object's lifetime, it is important to free the dynamically allocated memory to avoid memory leaks. The vector's destructor plays a crucial role in iterating over all elements and freeing the allocated memory.
+
+2. When building an object from the input file, different things can go wrong: the record represents an unknown 
+type of vehicle, or record contains invalid data. How can the function loadData() detect what went wrong? Can you 
+think at another solution than the one you have implemented?
+
+void loadData(const char* filename, sdds::Autoshop& as)
+{
+	std::ifstream file(filename);
+	if (!file)
+	{
+		std::cerr << "ERROR: Cannot open file [" << filename << "].\n";
+		return;
+	}
+	while (file)
+	{
+		try {
+			sdds::Vehicle* aVehicle = sdds::createInstance(file);
+			if (aVehicle){
+				as += aVehicle;
+			}
+		}
+		catch (const char* msg) {
+			std::cout<< msg;
+		}
+		catch (const std::string& msg) {
+			std::cout << msg;
+		}
+
+		if (file.eof()) {
+			break;
+		}
+	}
+}
+
+In the function loadData, if the file can be opened, try calling the function createInstance to create new 
+objects, and catch possible errors. Within the function createInstance, the exception of an unknown type of 
+vehicle is detected and handled by throwing out an error message. The error message is concatenated strings and 
+will be caught and printed by catch (const std::string& msg). The constructor of Car, Racecar, Van, or LuxuryVan 
+are called in the function createInstance after reading the tag from the file. The record containing invalid data 
+is detected and handled by throwing out an error message in the constructor. The error message is a single string 
+and will be caught and printed by catch (const char* msg).
+
+Instead of using try... catch... in the function loadData, we can just use if.... If any error occurs in the 
+function createInstance, print out the error message directly and return nullptr. Only if aVehicle is not a 
+nullptr, append the new object to the m_vehicles vector in Autoshop as.
+
+3. In this workshop, the use of "std::listsdds::Vehicle*" and "std::vectorsdds::Vehicle*" was necessary to store a collection of vehicles as pointers. It would not be suitable to use "std::listsdds::Vehicle" or "std::vectorsdds::Vehicle" instead. The reason is that the "Vehicle" class can have derived classes like "Car," "Racecar," "Van," or "LuxuryVan." These derived classes may have different sizes and require dynamic memory allocation. Storing objects directly in a list or vector would result in object slicing and inconsistent memory allocation, which is not desirable. By storing pointers to the base class "Vehicle," polymorphism is maintained, and dynamic memory allocation can be appropriately handled for each derived class.
+
