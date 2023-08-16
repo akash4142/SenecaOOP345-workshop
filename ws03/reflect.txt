@@ -1,0 +1,13 @@
+/*name - akash yadav
+student no. = 172566218
+seneca email- ayadav35@myseneca.ca
+section - ncc
+
+citation-:
+
+ I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
+*/
+
+
+reflection - hi professor , i have learnt the template in the depth i have learnt how to use the class template , function templates and their uses and call during the all workshop . i also learnt that it is totally different for the const char * type in this case we have a different approach . apart from this , it was a good practice for the templates .  pusch function is basically allows ust o provide a customized implementation for specific types .
